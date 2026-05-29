@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEDIXLAB - Laboratorio Clínico</title>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadRecaptchaCallback&render=explicit" async defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background-color: #ffffff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .site-logo {
+            width: 70px;
+            height: auto;
+            border-radius: 0;
+            object-fit: contain;
+            box-shadow: none;
+            background: transparent;
+        }
+
+        /* Highlighted nav CTA */
+        .nav-cta {
+            background: linear-gradient(90deg,#ff7a3d,#e85d2e);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 28px;
+            box-shadow: 0 10px 24px rgba(232,93,46,0.28);
+            transform: translateY(0);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(232,93,46,0.32);
+        }
+
+        .logo-text h1 {
+            font-size: 17px;
+            color: #003d7a;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        nav button {
+            background-color: #1BA6D6;
+            color: white;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background-color: #1591ba;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27, 166, 214, 0.3);
+        }
+
+        .nav-cta:hover {
+            background: linear-gradient(90deg,#ff8c4b,#e85d2e);
+            box-shadow: 0 12px 28px rgba(232,93,46,0.32);
+            transform: translateY(-3px);
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #003d7a 0%, #1BA6D6 100%);
+            color: white;
+            padding: 80px 24px 60px;
+            min-height: 620px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+        }
+
+        .hero::before {
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.18);
+            top: 20px;
+            left: 10px;
+        }
+
+        .hero::after {
+            width: 260px;
+            height: 260px;
+            background: rgba(255, 255, 255, 0.12);
+            bottom: 0;
+            right: -40px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+            align-items: center;
+            gap: 36px;
+            width: min(1180px, 100%);
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-copy {
+            text-align: left;
+        }
+
+        .hero .eyebrow {
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.88);
+            margin-bottom: 16px;
+        }
+
+        .hero h2 {
+            font-size: clamp(2.7rem, 4vw, 4rem);
+            margin-bottom: 24px;
+            font-weight: 800;
+            line-height: 1.05;
+            max-width: 720px;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            margin-bottom: 34px;
+            max-width: 620px;
+            line-height: 1.8;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .hero-visual {
+            display: grid;
+            gap: 18px;
+        }
+
+        .hero-image-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 44px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-image-card img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+            height: 360px;
+        }
+
+        .hero-image-overlay {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.42);
+            color: white;
+            padding: 18px 20px;
+            border-radius: 16px;
+        }
+
+        .hero-image-overlay span {
+            display: inline-block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #cfe8ff;
+        }
+
+        .hero-image-overlay p {
+            margin: 0;
+            line-height: 1.65;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .hero-stat-card {
+            background: white;
+            border: 1px solid rgba(27, 166, 214, 0.18);
+            border-radius: 18px;
+            padding: 22px 20px;
+            color: #003d7a;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.25s ease;
+        }
+
+        .hero-stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .hero-stat-card strong {
+            display: block;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-stat-card p {
+            margin: 0;
+            line-height: 1.6;
+            color: #455a75;
+        }
+
+        .hero-badge-card strong {
+            display: block;
+            margin-bottom: 6px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .hero-badge-card p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 0.97rem;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 1024px) {
+            .service-options-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 960px) {
+            .hero {
+                padding: 60px 20px 50px;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-copy,
+            .hero-visual {
+                text-align: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats-grid,
+            .home-services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats-grid {
+                gap: 14px;
+            }
+
+            .hero-image-card img {
+                height: 280px;
+            }
+
+            .home-service-info {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .btn-view-all {
+                justify-self: center;
+                width: 100%;
+                max-width: 360px;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .hero h2 {
+                font-size: 2.7rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .services-section {
+                padding: 60px 16px 40px;
+            }
+
+            .services-section h2 {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+            }
+
+            .services-section > p {
+                font-size: 0.95rem;
+                margin-bottom: 30px;
+            }
+
+            .home-services-grid {
+                gap: 18px;
+                margin-bottom: 24px;
+            }
+
+            .service-card {
+                min-height: auto;
+            }
+
+            .service-card img {
+                height: 220px;
+            }
+
+            .service-card-content {
+                padding: 20px;
+                gap: 12px;
+            }
+
+            .service-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .service-card p {
+                font-size: 0.9rem;
+            }
+
+            .home-service-info {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding-top: 16px;
+                border-top: 1px solid rgba(208, 221, 235, 0.9);
+                margin-top: 16px;
+            }
+
+            .home-service-info h3 {
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+
+            .home-service-info p {
+                font-size: 0.9rem;
+            }
+
+            .btn-view-all {
+                width: 100%;
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
+
+            .service-option-card {
+                padding: 20px 18px;
+            }
+
+            .service-option-icon {
+                width: 48px;
+                height: 48px;
+                margin: 0 auto 14px;
+                font-size: 20px;
+            }
+
+            .service-option-card h3 {
+                font-size: 1.05rem;
+                margin-bottom: 10px;
+            }
+
+            .service-option-card p {
+                font-size: 0.9rem;
+            }
+
+            .service-main-cta {
+                padding: 12px 28px;
+                font-size: 0.9rem;
+                margin: 36px auto 0;
+            }
+        }
+
+        .btn-primary {
+            background-color: #E85D2E;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 93, 46, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #d44a1a;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(232, 93, 46, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 38px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: #003d7a;
+        }
+
+        /* Services Section */
+        .services-section {
+            padding: 80px 24px 60px;
+            background: #f7f9fc;
+            position: relative;
+        }
+
+        .services-section h2 {
+            font-size: clamp(2.2rem, 3vw, 3.4rem);
+            text-align: center;
+            color: #003d7a;
+            margin-bottom: 16px;
+            font-weight: 800;
+        }
+
+        .services-section > p {
+            text-align: center;
+            color: #556477;
+            margin-bottom: 42px;
+            font-size: 1rem;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .home-services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            align-items: stretch;
+            margin-bottom: 32px;
+        }
+
+        .service-options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(240px, 1fr));
+            gap: 24px;
+            max-width: 1180px;
+            margin: 0 auto;
+            margin-bottom: 18px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(208, 221, 235, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .service-card-large {
+            min-height: auto;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .service-card-content {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+            color: #003d7a;
+            margin-bottom: 10px;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .service-card p {
+            color: #566075;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        .home-service-info {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 24px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(208, 221, 235, 0.9);
+        }
+
+        .home-service-info h3 {
+            font-size: 1.25rem;
+            color: #003d7a;
+            margin-bottom: 10px;
+        }
+
+        .home-service-info p {
+            color: #5c6f85;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            max-width: 640px;
+        }
+
+        .btn-view-all {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background: #1BA6D6;
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 700;
+            transition: background 0.25s ease, transform 0.25s ease;
+            box-shadow: 0 10px 22px rgba(0, 61, 122, 0.14);
+            margin: 0;
+        }
+
+        .btn-view-all:hover {
+            background: #003d7a;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 26px rgba(0, 61, 122, 0.16);
+        }
+
+        .service-option-card {
+            background: white;
+            border: 1px solid #e2eaf4;
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .service-option-card:hover,
+        .service-option-card.active {
+            transform: translateY(-3px);
+            border-color: #1BA6D6;
+            box-shadow: 0 16px 30px rgba(27, 166, 214, 0.12);
+        }
+
+        .service-option-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 18px;
+            border-radius: 16px;
+            background: #e9f4ff;
+            display: grid;
+            place-items: center;
+            color: #1BA6D6;
+            font-size: 24px;
+        }
+
+        .service-option-card h3 {
+            margin-bottom: 12px;
+            font-size: 18px;
+            color: #003d7a;
+        }
+
+        .service-option-card p {
+            color: #5a6c81;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        .service-main-cta {
+            display: block;
+            margin: 48px auto 0;
+            text-align: center;
+            background-color: #003d7a;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            box-shadow: 0 12px 28px rgba(0, 61, 122, 0.18);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .service-main-cta:hover {
+            background-color: #1BA6D6;
+            transform: translateY(-2px);
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 45px;
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #003d7a;
+            margin-bottom: 18px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .form-intro {
+            color: #556477;
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1BA6D6;
+            box-shadow: 0 0 0 3px rgba(27, 166, 214, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group button {
+            width: 100%;
+            background-color: #E85D2E;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background-color: #d44a1a;
+        }
+
+        /* Results Section */
+        .results-section {
+            padding: 80px 24px;
+            background: #f7fbff;
+        }
+
+        .results-hero {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 28px;
+            align-items: start;
+            max-width: 1180px;
+            margin: 0 auto 40px;
+        }
+
+        .results-intro {
+            display: grid;
+            gap: 18px;
+        }
+
+        .results-intro .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #1BA6D6;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-size: 13px;
+        }
+
+        .results-intro h2 {
+            margin: 0;
+            color: #003d7a;
+            font-size: clamp(2.4rem, 3vw, 3.4rem);
+            line-height: 1.05;
+            font-weight: 800;
+        }
+
+        .results-intro p {
+            max-width: 680px;
+            color: #4d6478;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .results-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid rgba(208, 221, 235, 0.9);
+            border-radius: 24px;
+            padding: 28px 26px;
+            min-height: 180px;
+            box-shadow: 0 14px 32px rgba(0, 37, 88, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 38px rgba(0, 37, 88, 0.1);
+        }
+
+        .summary-card strong {
+            display: block;
+            margin-top: 18px;
+            font-size: 44px;
+            color: #003d7a;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .summary-card span {
+            display: block;
+            color: #5c6f84;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-top: 8px;
+        }
+
+        .results-search {
+            max-width: 820px;
+            margin: 0 auto 40px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .results-search input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 1px solid #c7d4e5;
+            border-radius: 16px;
+            font-size: 15px;
+            color: #1f3345;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .results-search button {
+            background-color: #1BA6D6;
+            color: white;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 12px 22px rgba(27, 166, 214, 0.16);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .results-search button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 26px rgba(27, 166, 214, 0.2);
+        }
+
+        .result-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 0 auto 40px;
+            max-width: 1180px;
+        }
+
+        .result-card {
+            background: white;
+            border: 1px solid rgba(27, 166, 214, 0.15);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 18px 34px rgba(27, 166, 214, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .result-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 22px 44px rgba(27, 166, 214, 0.12);
+        }
+
+        .result-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .result-card-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #003d7a;
+            line-height: 1.2;
+        }
+
+        .result-card-meta {
+            color: #5a6778;
+            font-size: 14px;
+            margin-bottom: 10px;
+            line-height: 1.75;
+        }
+
+        .result-reference {
+            color: #66788a;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .result-reference strong {
+            color: #1BA6D6;
+            font-weight: 700;
+        }
+
+        .result-card .result-tag {
+            display: inline-flex;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .result-card .result-tag.completed {
+            background: rgba(40, 167, 69, 0.12);
+            color: #218838;
+        }
+
+        .result-card .result-tag.processing {
+            background: rgba(27, 166, 214, 0.12);
+            color: #0f6f9a;
+        }
+
+        .result-card .result-tag.pending {
+            background: rgba(255, 193, 7, 0.14);
+            color: #856404;
+        }
+
+        .result-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .result-card-footer button {
+            background-color: #003d7a;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .result-card-footer button:hover {
+            background-color: #1BA6D6;
+            transform: translateY(-1px);
+        }
+
+        .result-card-footer button[disabled] {
+            background-color: #c7d4e5;
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        .report-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            z-index: 9999;
+        }
+
+        .report-modal-overlay[hidden] {
+            display: none;
+        }
+
+        .report-modal-card {
+            width: min(760px, 100%);
+            background: white;
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: transparent;
+            border: none;
+            font-size: 28px;
+            line-height: 1;
+            color: #1f3345;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 26px;
+        }
+
+        .modal-header .eyebrow {
+            color: #1BA6D6;
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 32px;
+            color: #003d7a;
+            line-height: 1.05;
+        }
+
+        .modal-body {
+            display: grid;
+            gap: 20px;
+            color: #4d6478;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .modal-details {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .modal-details li {
+            padding: 14px 18px;
+            border-radius: 16px;
+            background: #f4f9ff;
+            border: 1px solid #d9e7fb;
+            color: #2d4b71;
+        }
+
+        .modal-actions {
+            margin-top: 18px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        #modal-download-btn {
+            background-color: #003d7a;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        #modal-download-btn:hover {
+            background-color: #1BA6D6;
+            transform: translateY(-1px);
+        }
+
+        #modal-status {
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        #modal-status.completed {
+            background: rgba(40, 167, 69, 0.12);
+            color: #218838;
+        }
+
+        #modal-status.processing {
+            background: rgba(27, 166, 214, 0.12);
+            color: #0f6f9a;
+        }
+
+        #modal-status.pending {
+            background: rgba(255, 193, 7, 0.14);
+            color: #856404;
+        }
+
+        .results-search input {
+            flex: 1;
+            padding: 16px 18px;
+            border: 1px solid #c7d4e5;
+            border-radius: 14px;
+            font-size: 15px;
+            color: #1f3345;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .results-search button {
+            background-color: #1BA6D6;
+            color: white;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 12px 22px rgba(27, 166, 214, 0.16);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .results-search button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 26px rgba(27, 166, 214, 0.2);
+        }
+
+        .results-empty-state {
+            max-width: 820px;
+            margin: -10px auto 34px;
+            color: #856404;
+            font-size: 15px;
+            text-align: center;
+            background: #fff7cc;
+            border: 1px solid #ffe58f;
+            padding: 14px 18px;
+            border-radius: 16px;
+        }
+
+        .results-panel {
+            max-width: 1180px;
+            margin: 0 auto 40px;
+            background: white;
+            border-radius: 28px;
+            border: 1px solid rgba(27, 166, 214, 0.14);
+            padding: 32px;
+            box-shadow: 0 22px 52px rgba(27, 166, 214, 0.08);
+        }
+
+        .results-panel-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .results-panel-header .panel-title {
+            max-width: 640px;
+        }
+
+        .results-panel-header .panel-title h3 {
+            margin: 0;
+            color: #003d7a;
+            font-size: 28px;
+            line-height: 1.1;
+            font-weight: 800;
+        }
+
+        .results-panel-header .panel-title p {
+            margin: 14px 0 0;
+            color: #5c6f84;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .panel-badges {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .panel-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(27, 166, 214, 0.1);
+            color: #0f6f9a;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font-weight: 700;
+            font-size: 13px;
+            border: 1px solid rgba(27, 166, 214, 0.16);
+        }
+
+        .panel-badge span {
+            font-size: 18px;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .panel-card {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: #f6f9ff;
+            border: 1px solid rgba(27, 166, 214, 0.14);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .panel-card-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #1BA6D6 0%, #003d7a 100%);
+            color: white;
+        }
+
+        .panel-card-icon svg {
+            width: 28px;
+            height: 28px;
+            display: block;
+        }
+
+        .service-option-icon svg {
+            width: 22px;
+            height: 22px;
+            display: block;
+        }
+
+        .panel-card strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #003d7a;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .panel-card p {
+            margin: 0;
+            color: #5c6f84;
+            line-height: 1.75;
+            font-size: 14px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin: 0 auto;
+            max-width: 1180px;
+        }
+
+        .report-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+            border: 1px solid rgba(27, 166, 214, 0.15);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 18px 34px rgba(27, 166, 214, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: grid;
+            gap: 18px;
+        }
+
+        .report-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 22px 44px rgba(27, 166, 214, 0.12);
+        }
+
+        .report-card-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .report-card-header h4 {
+            margin: 0;
+            color: #003d7a;
+            font-size: 18px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .report-card-meta {
+            color: #5c6f84;
+            font-size: 14px;
+            line-height: 1.75;
+        }
+
+        .report-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .report-card-footer button {
+            background-color: #003d7a;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .report-card-footer button:hover {
+            background-color: #1BA6D6;
+            transform: translateY(-1px);
+        }
+
+        .report-card-footer button[disabled] {
+            background-color: #c7d4e5;
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 80px 24px;
+            background: #f7fbff;
+            color: #003d7a;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-size: clamp(2.4rem, 3vw, 3.4rem);
+            margin-bottom: 20px;
+            font-weight: 800;
+            color: #003d7a;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            background: white;
+            padding: 28px;
+            border-radius: 22px;
+            border: 1px solid rgba(208, 221, 235, 0.9);
+            box-shadow: 0 16px 32px rgba(0, 46, 95, 0.06);
+            text-align: left;
+        }
+
+        .contact-item h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #003d7a;
+        }
+
+        .contact-item p {
+            font-size: 0.95rem;
+            color: #4f637f;
+            line-height: 1.75;
+            margin: 0;
+        }
+
+        .contact-locations {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            padding: 0 50px;
+        }
+
+        .contact-locations h3 {
+            text-align: center;
+            font-size: 28px;
+            color: #003d7a;
+            margin-bottom: 50px;
+            font-weight: 800;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #001d4a;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 50px 20px;
+                min-height: auto;
+            }
+
+            .hero h2 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .services-section,
+            .form-section,
+            .results-section,
+            .contact-section {
+                padding: 40px 20px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .results-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .results-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-panel {
+                padding: 24px;
+            }
+
+            .results-search {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .results-search button {
+                width: 100%;
+            }
+
+            .results-table {
+                font-size: 13px;
+            }
+
+            .results-table th,
+            .results-table td {
+                padding: 10px;
+            }
+
+            .home-services-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+                margin-bottom: 24px;
+            }
+
+            .service-options-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .service-option-card {
+                padding: 20px 18px;
+            }
+
+            .home-service-info {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                text-align: center;
+                justify-items: center;
+            }
+
+            .btn-view-all {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .services-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .service-card img {
+                height: 180px;
+            }
+
+            .service-option-card {
+                padding: 16px 14px;
+            }
+
+            .btn-view-all,
+            .service-main-cta {
+                width: 100%;
+            }
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-buttons button {
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab-buttons button.active {
+            background-color: #1BA6D6;
+            color: white;
+        }
+
+        .tab-buttons button:hover {
+            background-color: #1BA6D6;
+            color: white;
+        }
+        /* Captcha & honeypot styles */
+        .honeypot { display:none !important; }
+        .captcha-row { display:flex; gap:12px; align-items:center; margin-bottom:18px; }
+        .captcha-question { font-weight:600; color:#333; background:#f3f6f9; padding:10px 12px; border-radius:8px; border:1px solid #e6eef6; }
+        .captcha-input { width:120px; }
+        .captcha-error { color: #b00020; font-size:13px; margin-top:6px; display:none; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-section">
+            <img src="assets/medixlab-logo.png" alt="MEDIXLAB logo" class="site-logo">
+            <div class="logo-text">
+                <h1>MEDIXLAB</h1>
+                <p>LABORATORIO DE MICROBIOLOGIA</p>
+            </div>
+        </div>
+        <nav>
+            <button onclick="showPage('home')">Inicio</button>
+            <button onclick="showPage('services')">Servicios</button>
+            <button class="nav-cta" onclick="showPage('cita')">Solicitar Cita</button>
+            <button onclick="showPage('results')">Resultados</button>
+            <button onclick="showPage('contact')">Contacto</button>
+        </nav>
+    </header>
+
+    <!-- Home Page -->
+    <div id="home" class="page-section active">
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="hero-copy">
+                    <span class="eyebrow">Microbiología Clínica</span>
+                    <h2>Diagnósticos precisos para el control de infecciones</h2>
+                    <p>Laboratorio especializado en microbiología con análisis de cultivos, PCR y biomarcadores bajo estrictos protocolos de bioseguridad.</p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary" onclick="showPage('cita')">Solicitar Cita</button>
+                        <button class="btn-secondary" onclick="showPage('services')">Ver Servicios</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-image-card">
+                        <img src="assets/home-service-2.png" alt="Laboratory technician preparing samples">
+                        <div class="hero-image-overlay">
+                            <span>Laboratorio con certificación</span>
+                            <p>Procesos validados para análisis microbiológicos con trazabilidad completa.</p>
+                        </div>
+                    </div>
+                    <div class="hero-stats-grid">
+                        <div class="hero-stat-card">
+                            <strong>25.000+</strong>
+                            <p>Muestras analizadas al año</p>
+                        </div>
+                        <div class="hero-stat-card">
+                            <strong>98.9%</strong>
+                            <p>Precisión en pruebas bacteriológicas</p>
+                        </div>
+                        <div class="hero-stat-card">
+                            <strong>24/7</strong>
+                            <p>Soporte para resultados y consultas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="services-section">
+            <h2>Servicios de Microbiología</h2>
+            <p>Soluciones de diagnóstico para detección de patógenos, cultivos y pruebas moleculares con resultados confiables.</p>
+            
+            <div class="home-services-grid">
+                <div class="service-card service-card-large">
+                    <img src="assets/home-service-1.png" alt="Equipo de microbiología en laboratorio">
+                    <div class="service-card-content">
+                        <h3>Microbiología y Cultivos</h3>
+                        <p>Identificación de bacterias y hongos con ensayos de susceptibilidad para tratamientos precisos.</p>
+                    </div>
+                </div>
+                
+                <div class="service-card service-card-large">
+                    <img src="assets/home-service-2.png" alt="Laboratorio de biología molecular">
+                    <div class="service-card-content">
+                        <h3>Pruebas Moleculares</h3>
+                        <p>Detección de ADN/ARN para virus, bacterias y microrganismos con tecnología de última generación.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="home-service-info">
+                <div>
+                    <h3>Calidad y bioseguridad</h3>
+                    <p>Procesos bajo normas internacionales y con sistemas de control para proteger tu salud y la de la comunidad.</p>
+                </div>
+                <button class="btn-view-all" onclick="showPage('services')">Descubre más servicios</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Services Page -->
+    <div id="services" class="page-section">
+        <section class="services-section">
+            <h2>Servicios Especializados en Microbiología</h2>
+            <p>Diagnóstico de infectología con métodos avanzados y resultados que apoyan decisiones clínicas precisas.</p>
+            
+            <div class="service-options-grid">
+                <div class="service-option-card active">
+                    <div class="service-option-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M6 3h12v4H6z" fill="currentColor"/>
+                            <rect x="4" y="7" width="16" height="12" rx="2" fill="currentColor" opacity="0.95"/>
+                        </svg>
+                    </div>
+                    <h3>Cultivos Clínicos</h3>
+                    <p>Pruebas de cultivo bacteriano y fúngico para identificar patógenos y su perfil de susceptibilidad.</p>
+                </div>
+                <div class="service-option-card">
+                    <div class="service-option-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M12 2v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 8h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 22h10l-1-6H8l-1 6z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>PCR Molecular</h3>
+                    <p>Detección de material genético de virus y bacterias con sensibilidad elevada y tiempos de entrega rápidos.</p>
+                </div>
+                <div class="service-option-card">
+                    <div class="service-option-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/>
+                            <path d="M8 12h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Antibiograma</h3>
+                    <p>Estudios de resistencia para guiar el tratamiento antibiótico de infecciones complejas.</p>
+                </div>
+                <div class="service-option-card">
+                    <div class="service-option-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/>
+                            <path d="M7 12h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Calidad Microbiológica</h3>
+                    <p>Monitoreo ambiental y de superficies para garantizar procesos seguros en entornos clínicos.</p>
+                </div>
+                <div class="service-option-card">
+                    <div class="service-option-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M12 2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                            <path d="M8 22h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Bioseguridad</h3>
+                    <p>Servicios de tamizaje e investigación para protección de pacientes y personal sanitario.</p>
+                </div>
+                <div class="service-option-card">
+                    <div class="service-option-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                            <path d="M6 8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                            <path d="M18 8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Análisis Estadístico</h3>
+                    <p>Reportes completos que integran datos clínicos y microbiológicos para gestión de casos.</p>
+                </div>
+            </div>
+            <button class="service-main-cta" onclick="showPage('cita')">Programar Consulta de Microbiología</button>
+        </section>
+    </div>
+
+    <!-- Request Appointment Page -->
+    <div id="cita" class="page-section">
+        <section class="form-section">
+            <div class="form-container">
+                <h2>Solicitar Cita</h2>
+                <form action="https://formspree.io/f/xojbppkb" method="POST" data-recaptcha-widget="cita">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipo">Tipo de Análisis</label>
+                        <select id="tipo" name="tipo" required>
+                            <option value="">Seleccionar análisis...</option>
+                            <option value="general">Cultivos Microbiológicos</option>
+                            <option value="sangre">PCR y Diagnóstico Molecular</option>
+                            <option value="genetico">Antibiograma / Resistencias</option>
+                            <option value="especializado">Bioseguridad y Control Ambiental</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha">Fecha Preferida</label>
+                        <input type="date" id="fecha" name="fecha" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notas">Notas Adicionales</label>
+                        <textarea id="notas" name="notas" placeholder="Cuéntanos si tienes alguna preferencia especial..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" name="phone_confirm" class="honeypot" tabindex="-1" autocomplete="off" hidden>
+                        <div id="recaptcha-cita"></div>
+                        <button type="submit">Solicitar Cita</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Results Page -->
+    <div id="results" class="page-section">
+        <section class="results-section">
+            <div class="results-hero">
+                <div class="results-intro">
+                    <span class="eyebrow">Resultados de laboratorio</span>
+                    <h2>Revisa tus informes con un solo clic</h2>
+                    <p>Utiliza tu número de referencia para acceder a tus resultados clínicos en tiempo real. Nuestro sistema de informes está diseñado para ofrecer claridad, seguridad y rapidez.</p>
+                </div>
+                <div class="results-summary">
+                    <article class="summary-card">
+                        <span>Informes clínicos disponibles</span>
+                        <strong>3</strong>
+                    </article>
+                    <article class="summary-card">
+                        <span>Informes finalizados</span>
+                        <strong>2</strong>
+                    </article>
+                    <article class="summary-card">
+                        <span>Análisis en curso</span>
+                        <strong>1</strong>
+                    </article>
+                </div>
+            </div>
+
+            <div class="results-search">
+                <input id="results-search-input" type="text" placeholder="Ingresa tu número de referencia..." aria-label="Buscar resultados">
+                <button type="button" id="results-search-button">Buscar</button>
+            </div>
+            <p id="results-empty-state" class="results-empty-state" hidden>No se encontraron resultados con ese número de referencia.</p>
+
+            <div class="result-cards" id="result-cards"></div>
+
+            <div class="report-modal-overlay" id="report-modal" hidden>
+                <div class="report-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                    <button type="button" class="modal-close" id="modal-close" aria-label="Cerrar modal">×</button>
+                    <div class="modal-header">
+                        <div>
+                            <span class="eyebrow">Detalle del informe</span>
+                            <h3 id="modal-title">Título del informe</h3>
+                            <p id="modal-reference" class="result-reference">Referencia</p>
+                        </div>
+                        <span class="result-tag" id="modal-status">Estado</span>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modal-description">Descripción del informe.</p>
+                        <ul class="modal-details" id="modal-details"></ul>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" id="modal-download-btn">Descargar informe</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="results-panel-header">
+                    <div class="panel-title">
+                        <span class="eyebrow">Panel de acceso</span>
+                        <h3>Tu espacio seguro para consultar resultados clínicos</h3>
+                        <p>Gestiona tus informes, revisa el estado del análisis y descarga los documentos oficiales desde un solo lugar, con diseño pensado para la experiencia de un laboratorio profesional.</p>
+                    </div>
+                    <div class="panel-badges">
+                        <div class="panel-badge">2 informes clínicos listos</div>
+                        <div class="panel-badge">1 análisis en curso</div>
+                        <div class="panel-badge">Conexión segura</div>
+                    </div>
+                </div>
+
+                <div class="panel-grid">
+                    <div class="panel-card">
+                        <div class="panel-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M3 7a2 2 0 0 1 2-2h3l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="white"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Documentos disponibles</strong>
+                            <p>Descarga tus informes de sangre y perfil lipídico en PDF completo y en formato profesional.</p>
+                        </div>
+                    </div>
+                    <div class="panel-card">
+                        <div class="panel-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M7 2v11a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V2" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 22h8" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Análisis en curso</strong>
+                            <p>Tu prueba de glucosa está siendo procesada por nuestro equipo de laboratorio con garantía de precisión.</p>
+                        </div>
+                    </div>
+                    <div class="panel-card">
+                        <div class="panel-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M15 17a3 3 0 0 1-6 0" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 3v1" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M19 11a7 7 0 0 1-14 0c0-4 3-7 7-7s7 3 7 7z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Notificaciones rápidas</strong>
+                            <p>Recibe alertas cuando los resultados estén listos y accede al historial de tus estudios con facilidad.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page-section">
+        <section class="form-section">
+            <div class="form-container">
+                <h2>Contacto</h2>
+                <p class="form-intro">¿Tienes preguntas? Nos encantaría escucharte. Completa el formulario y nos pondremos en contacto pronto.</p>
+                
+                <form action="https://formspree.io/f/xojbppkb" method="POST" data-recaptcha-widget="contact">
+                    <div class="form-group">
+                        <label for="contact-nombre">Nombre Completo</label>
+                        <input type="text" id="contact-nombre" name="nombre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-email">Correo Electrónico</label>
+                        <input type="email" id="contact-email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-telefono">Teléfono</label>
+                        <input type="tel" id="contact-telefono" name="telefono" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-asunto">Asunto</label>
+                        <select id="contact-asunto" name="asunto" required>
+                            <option value="">Seleccionar asunto...</option>
+                            <option value="consulta">Consulta General</option>
+                            <option value="presupuesto">Solicitar Presupuesto</option>
+                            <option value="problema">Reportar Problema</option>
+                            <option value="sugerencia">Sugerencia o Comentario</option>
+                            <option value="otra">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-mensaje">Mensaje</label>
+                        <textarea id="contact-mensaje" name="mensaje" placeholder="Cuéntanos cómo podemos ayudarte..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" name="phone_confirm" class="honeypot" tabindex="-1" autocomplete="off" hidden>
+                        <div id="recaptcha-contact"></div>
+                        <button type="submit">Enviar Mensaje</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="contact-locations">
+                <h3>Nuestras Oficinas</h3>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>📍 Dirección</h3>
+                        <p>Calle Principal 123<br>Centro Médico, Ciudad<br>País</p>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <h3>📞 Teléfono</h3>
+                        <p>+1 (555) 123-4567<br>+1 (555) 123-4568<br>Lunes a Viernes: 8am - 6pm</p>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <h3>Correo electrónico</h3>
+                            <p>info@medixlab.com<br>citas@medixlab.com<br>soporte@medixlab.com</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 MEDIXLAB - Laboratorio de Tecnología. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        const recaptchaWidgets = {};
+        let reportData = [];
+
+        function onloadRecaptchaCallback() {
+            if (typeof grecaptcha === 'undefined') {
+                return;
+            }
+            recaptchaWidgets.cita = grecaptcha.render('recaptcha-cita', {
+                sitekey: '6LdJWf8sAAAAAODjo-R7Ti-_dLa6stHY4YPlEqav'
+            });
+            recaptchaWidgets.contact = grecaptcha.render('recaptcha-contact', {
+                sitekey: '6LdJWf8sAAAAAODjo-R7Ti-_dLa6stHY4YPlEqav'
+            });
+        }
+
+        function validateRecaptcha(form) {
+            const honeypot = form.querySelector('.honeypot');
+            if (honeypot && honeypot.value.trim() !== '') {
+                return false;
+            }
+
+            const widgetName = form.dataset.recaptchaWidget;
+            const widgetId = widgetName ? recaptchaWidgets[widgetName] : null;
+            const response = widgetId != null && typeof grecaptcha !== 'undefined'
+                ? grecaptcha.getResponse(widgetId)
+                : '';
+
+            if (!response) {
+                alert('Por favor completa el captcha de Google antes de enviar el formulario.');
+                return false;
+            }
+            return true;
+        }
+
+        function updateResultsSummary(cards) {
+            const total = cards.length;
+            const completed = cards.filter(card => card.querySelector('.result-tag.completed')).length;
+            const processing = cards.filter(card => card.querySelector('.result-tag.processing')).length;
+            const summaryCounters = document.querySelectorAll('.results-summary strong');
+            if (summaryCounters.length >= 3) {
+                summaryCounters[0].textContent = total;
+                summaryCounters[1].textContent = completed;
+                summaryCounters[2].textContent = processing;
+            }
+        }
+
+        function filterResults() {
+            const query = document.getElementById('results-search-input').value.trim().toLowerCase();
+            const cards = Array.from(document.querySelectorAll('.result-card'));
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const description = card.querySelector('.result-card-meta')?.textContent.toLowerCase() || '';
+                const reference = card.dataset.reference?.toLowerCase() || '';
+                const matches = query === '' || title.includes(query) || description.includes(query) || reference.includes(query);
+                card.style.display = matches ? 'grid' : 'none';
+                if (matches) visibleCount++;
+            });
+
+            const emptyState = document.getElementById('results-empty-state');
+            emptyState.hidden = visibleCount > 0;
+            updateResultsSummary(cards.filter(card => card.style.display !== 'none'));
+        }
+
+        // Render report cards dynamically from reportData
+        function renderReportCards() {
+            const container = document.getElementById('result-cards') || document.querySelector('.result-cards');
+            if (!container) return;
+            container.innerHTML = reportData.map(report => {
+                const statusTag = `<span class="result-tag ${report.statusClass}">${report.status}</span>`;
+                const actionButton = (report.statusClass === 'completed' || report.status === 'Completado')
+                    ? `<button type="button" class="report-detail-btn" data-report-id="${report.id}">Ver informe</button>`
+                    : `<button type="button" disabled>Pendiente</button>`;
+                const dateText = report.date ? report.date : '—';
+                return `
+                    <article class="result-card" data-reference="${report.reference}">
+                        <div>
+                            <div class="result-card-header">
+                                <h3>${report.title}</h3>
+                                ${statusTag}
+                            </div>
+                            <p class="result-card-meta">${report.description}</p>
+                            <p class="result-reference">Número de referencia: <strong>${report.reference}</strong></p>
+                        </div>
+                        <div class="result-card-footer">
+                            <span>Fecha: ${dateText}</span>
+                            ${actionButton}
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const forms = document.querySelectorAll('form[data-recaptcha-widget]');
+            forms.forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!validateRecaptcha(form)) {
+                        event.preventDefault();
+                    }
+                });
+            });
+
+            const searchInput = document.getElementById('results-search-input');
+            const searchButton = document.getElementById('results-search-button');
+            if (searchInput && searchButton) {
+                searchButton.addEventListener('click', filterResults);
+                searchInput.addEventListener('keyup', function(event) {
+                    if (event.key === 'Enter') {
+                        filterResults();
+                    }
+                });
+            }
+
+            // Load reports.json once and fall back to sample data if fetch fails
+            const loadReportData = async () => {
+                try {
+                    const response = await fetch('reports.json');
+                    if (!response.ok) {
+                        throw new Error('No se pudo cargar reports.json');
+                    }
+                    reportData = await response.json();
+                } catch (error) {
+                    reportData = [
+                        {
+                            id: 'ML-2026-001',
+                            title: 'Análisis General de Sangre',
+                            status: 'Completado',
+                            statusClass: 'completed',
+                            reference: 'ML-2026-001',
+                            description: 'Informe disponible para descarga. Incluye hemograma completo, plaquetas y análisis de leucocitos. Revisión clínica del perfil sanguíneo.',
+                            details: ['Hemograma completo', 'Recuento de plaquetas', 'Niveles de glóbulos rojos', 'Morfología de glóbulos blancos'],
+                            link: '#'
+                        },
+                        {
+                            id: 'ML-2026-002',
+                            title: 'Perfil Lipídico',
+                            status: 'Completado',
+                            statusClass: 'completed',
+                            reference: 'ML-2026-002',
+                            description: 'Informe detallado sobre colesterol total, HDL, LDL y triglicéridos, junto a recomendaciones personalizadas para tu salud cardiovascular.',
+                            details: ['Colesterol total', 'Colesterol HDL', 'Colesterol LDL', 'Triglicéridos'],
+                            link: '#'
+                        },
+                        {
+                            id: 'ML-2026-003',
+                            title: 'Prueba de Glucosa',
+                            status: 'En Proceso',
+                            statusClass: 'processing',
+                            reference: 'ML-2026-003',
+                            description: 'Análisis de glucosa en sangre para monitoreo metabólico. Informe disponible una vez finalizado el procesamiento en el laboratorio.',
+                            details: ['Glucosa en ayunas', 'Glucosa postprandial', 'Historia clínica relevante', 'Notas del laboratorio'],
+                            link: '#'
+                        }
+                    ];
+                }
+            };
+
+            await loadReportData();
+            renderReportCards();
+            const cards = Array.from(document.querySelectorAll('.result-card'));
+            updateResultsSummary(cards);
+            const detailButtons = document.querySelectorAll('.report-detail-btn');
+            const modalOverlay = document.getElementById('report-modal');
+            const modalClose = document.getElementById('modal-close');
+            const downloadButton = document.getElementById('modal-download-btn');
+
+            function openReportModal(reportId) {
+                const report = reportData.find(item => item.id === reportId);
+                if (!report || !modalOverlay) return;
+
+                document.getElementById('modal-title').textContent = report.title;
+                const statusElem = document.getElementById('modal-status');
+                statusElem.textContent = report.status;
+                statusElem.className = `result-tag ${report.statusClass}`;
+                document.getElementById('modal-reference').innerHTML = `Número de referencia: <strong>${report.reference}</strong>`;
+                document.getElementById('modal-description').textContent = report.description;
+                const detailsList = document.getElementById('modal-details');
+                detailsList.innerHTML = report.details.map(item => `<li>${item}</li>`).join('');
+                downloadButton.onclick = function() {
+                    window.location.href = report.link;
+                };
+                modalOverlay.hidden = false;
+            }
+
+            function closeReportModal() {
+                if (!modalOverlay) return;
+                modalOverlay.hidden = true;
+            }
+
+            detailButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    openReportModal(this.dataset.reportId);
+                });
+            });
+
+            modalClose.addEventListener('click', closeReportModal);
+            modalOverlay.addEventListener('click', function(event) {
+                if (event.target === modalOverlay) {
+                    closeReportModal();
+                }
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeReportModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

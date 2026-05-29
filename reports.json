@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ML-2026-001",
+    "title": "Análisis General de Sangre",
+    "status": "Completado",
+    "statusClass": "completed",
+    "reference": "ML-2026-001",
+    "description": "Informe disponible para descarga. Incluye hemograma completo, plaquetas y análisis de leucocitos. Revisión clínica del perfil sanguíneo.",
+    "details": [
+      "Hemograma completo",
+      "Recuento de plaquetas",
+      "Niveles de glóbulos rojos",
+      "Morfología de glóbulos blancos"
+    ],
+    "link": "#"
+  },
+  {
+    "id": "ML-2026-002",
+    "title": "Perfil Lipídico",
+    "status": "Completado",
+    "statusClass": "completed",
+    "reference": "ML-2026-002",
+    "description": "Informe detallado sobre colesterol total, HDL, LDL y triglicéridos, junto a recomendaciones personalizadas para tu salud cardiovascular.",
+    "details": [
+      "Colesterol total",
+      "Colesterol HDL",
+      "Colesterol LDL",
+      "Triglicéridos"
+    ],
+    "link": "#"
+  },
+  {
+    "id": "ML-2026-003",
+    "title": "Prueba de Glucosa",
+    "status": "En Proceso",
+    "statusClass": "processing",
+    "reference": "ML-2026-003",
+    "description": "Análisis de glucosa en sangre para monitoreo metabólico. Informe disponible una vez finalizado el procesamiento en el laboratorio.",
+    "details": [
+      "Glucosa en ayunas",
+      "Glucosa postprandial",
+      "Historia clínica relevante",
+      "Notas del laboratorio"
+    ],
+    "link": "#"
+  }
+]
